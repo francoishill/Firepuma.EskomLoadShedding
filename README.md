@@ -1,2 +1,3 @@
 # Firepuma.EskomLoadShedding
-A project to parse and represent Eskom loadshedding schedules (South Africa)
+
+A project to parse and represent Eskom (South Africa) loadshedding stages and schedules
