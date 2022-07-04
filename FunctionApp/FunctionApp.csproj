@@ -31,7 +31,4 @@
       <EmbeddedResource Include="Schedules\Data\Stage7.txt" />
       <EmbeddedResource Include="Schedules\Data\Stage8.txt" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Infrastructure" />
-    </ItemGroup>
 </Project>
