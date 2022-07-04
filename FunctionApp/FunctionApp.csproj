@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <AzureFunctionsVersion>V4</AzureFunctionsVersion>
+        <RootNamespace>Firepuma.EskomLoadShedding.FunctionApp</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="AngleSharp" Version="0.17.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
+        <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.0.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="host.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="local.settings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+        </None>
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="Data\RawScheduleTables\Stage1.txt" />
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Schedules\Data\Stage1.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage2.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage3.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage4.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage5.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage6.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage7.txt" />
+      <EmbeddedResource Include="Schedules\Data\Stage8.txt" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Infrastructure" />
+    </ItemGroup>
+</Project>
