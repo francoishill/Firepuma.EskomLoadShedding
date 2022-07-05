@@ -101,10 +101,20 @@ public static class GetLoadsheddingCalendar
 
         var calendar = new VCalendar
         {
-            CalendarName = customerType.ToString(),
+            CalendarName = GetCalendarName(customerType),
             CalendarEvents = events,
         };
 
         return new OkVCalendarObjectResult(calendar);
+    }
+
+    private static string GetCalendarName(CustomerType customerType)
+    {
+        return customerType switch
+        {
+            CustomerType.CityOfCapeTown => "CoCT LoadShedding",
+            CustomerType.Eskom => "Eskom LoadShedding",
+            _ => $"{customerType.ToString()} LoadShedding"
+        };
     }
 }
