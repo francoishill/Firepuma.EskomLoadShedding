@@ -36,9 +36,4 @@
       <Folder Include="FunctionApp\Schedules" />
     </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Include="TestData\Status\LoadSheddingAndOutagesSnippet1.html" />
-      <EmbeddedResource Include="TestData\Status\LoadSheddingAndOutagesSnippet2.html" />
-    </ItemGroup>
-
 </Project>
