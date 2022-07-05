@@ -13,10 +13,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Firepuma.EskomLoadShedding.FunctionApp.Api;
 
-public static class GetLoadsheddingCalendar
+public class GetLoadsheddingCalendar
 {
+    private readonly RawSchedulesParser _parser;
+
+    public GetLoadsheddingCalendar(
+        RawSchedulesParser parser)
+    {
+        _parser = parser;
+    }
+
     [FunctionName("GetLoadsheddingCalendar")]
-    public static async Task<IActionResult> RunAsync(
+    public async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
         ILogger log)
     {
@@ -52,8 +60,6 @@ public static class GetLoadsheddingCalendar
 
         var startOfTodayInSouthAfricanTimezone = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddHours(-2), DateTimeKind.Utc);
 
-        var parser = new RawSchedulesParser();
-
         for (var daysAgo = -startDaysAgo; daysAgo <= endInDays; daysAgo++)
         {
             var date = startOfTodayInSouthAfricanTimezone.AddDays(daysAgo);
@@ -62,7 +68,7 @@ public static class GetLoadsheddingCalendar
 
             for (var stage = 1; stage <= 8; stage++)
             {
-                var schedule = await parser.ParseScheduleAsync(stage);
+                var schedule = await _parser.ParseScheduleAsync(stage);
 
                 var timeSlots = schedule.GetOfflineSlotsForAreaOnDate(areaNumber, date);
                 foreach (var timeSlot in timeSlots)

@@ -10,10 +10,18 @@ using Microsoft.Extensions.Logging;
 
 namespace Firepuma.EskomLoadShedding.FunctionApp.Api;
 
-public static class GetLoadsheddingSlots
+public class GetLoadsheddingSlots
 {
+    private readonly RawSchedulesParser _parser;
+
+    public GetLoadsheddingSlots(
+        RawSchedulesParser parser)
+    {
+        _parser = parser;
+    }
+
     [FunctionName("GetLoadsheddingSlots")]
-    public static async Task<IActionResult> RunAsync(
+    public async Task<IActionResult> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
         ILogger log)
     {
@@ -45,8 +53,7 @@ public static class GetLoadsheddingSlots
             return HttpResponseFactory.CreateBadRequestResponse(dateValidationError);
         }
 
-        var parser = new RawSchedulesParser();
-        var schedule = await parser.ParseScheduleAsync(stage);
+        var schedule = await _parser.ParseScheduleAsync(stage);
 
         var timeSlots = schedule.GetOfflineSlotsForAreaOnDate(areaNumber, date);
         return new OkObjectResult(timeSlots);
