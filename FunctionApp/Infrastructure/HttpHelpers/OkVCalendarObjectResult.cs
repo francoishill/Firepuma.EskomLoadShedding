@@ -9,6 +9,7 @@ public class OkVCalendarObjectResult : OkObjectResult
     public OkVCalendarObjectResult(object value)
         : base(value)
     {
+        // Thanks to https://github.com/Azure/azure-functions-host/issues/6490
         Formatters = new FormatterCollection<IOutputFormatter>
         {
             new VCalendarOutputFormatter(),

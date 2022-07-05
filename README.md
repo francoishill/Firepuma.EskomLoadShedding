@@ -36,3 +36,17 @@ This endpoint responds with an array of time ranges for the given `customerType`
 	}
 ]
 ```
+
+### Source of information
+
+#### City of Cape Town
+
+* https://www.capetown.gov.za/Loadshedding1/loadshedding/maps/Load_Shedding_All_Areas_Schedule_and_Map.pdf
+* https://www.capetown.gov.za/Family%20and%20home/Residential-utility-services/Residential-electricity-services/Load-shedding-and-outages
+* https://twitter.com/CityofCT
+
+#### Eskom
+
+* https://loadshedding.eskom.co.za/LoadShedding/GetStatus
+* https://twitter.com/Eskom_SA?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor
+* https://www.eskom.co.za/distribution/customer-service/outages/municipal-loadshedding-schedules/
