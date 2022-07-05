@@ -50,13 +50,13 @@ public static class GetLoadsheddingCalendar
 
         var events = new List<VCalendar.CalendarEvent>();
 
-        var startOfToday = DateTime.Now.Date;
+        var startOfTodayInSouthAfricanTimezone = DateTime.SpecifyKind(DateTime.UtcNow.Date.AddHours(-2), DateTimeKind.Utc);
 
         var parser = new RawSchedulesParser();
 
         for (var daysAgo = -startDaysAgo; daysAgo <= endInDays; daysAgo++)
         {
-            var date = startOfToday.AddDays(daysAgo);
+            var date = startOfTodayInSouthAfricanTimezone.AddDays(daysAgo);
 
             var timeSlotsWithMinimumStage = new Dictionary<LoadSheddingSchedule.TimeRange, int>();
 

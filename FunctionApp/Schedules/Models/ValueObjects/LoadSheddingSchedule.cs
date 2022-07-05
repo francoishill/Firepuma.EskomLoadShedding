@@ -21,7 +21,7 @@ public class LoadSheddingSchedule
         int areaNumber,
         DateTime date)
     {
-        var dayOfMonth = date.Day;
+        var dayOfMonth = date.Kind == DateTimeKind.Utc ? date.AddHours(2).Day : date.Day;
         return DayOfMonthAndSlotsMappings[dayOfMonth]
             .SlotsAndAreasMap
             .Where(pair => pair.Value.Contains(areaNumber))
