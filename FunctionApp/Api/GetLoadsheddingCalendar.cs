@@ -38,13 +38,23 @@ public static class GetLoadsheddingCalendar
             return HttpResponseFactory.CreateBadRequestResponse(areaValidationError);
         }
 
+        if (!req.TryGetRequiredIntQueryParam("startDaysAgo", out var startDaysAgo, out _))
+        {
+            startDaysAgo = 3;
+        }
+
+        if (!req.TryGetRequiredIntQueryParam("endInDays", out var endInDays, out _))
+        {
+            endInDays = 14;
+        }
+
         var events = new List<VCalendar.CalendarEvent>();
 
         var startOfToday = DateTime.Now.Date;
 
         var parser = new RawSchedulesParser();
 
-        for (var daysAgo = -3; daysAgo <= 14; daysAgo++)
+        for (var daysAgo = -startDaysAgo; daysAgo <= endInDays; daysAgo++)
         {
             var date = startOfToday.AddDays(daysAgo);
 
