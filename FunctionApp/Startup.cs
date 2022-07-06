@@ -12,5 +12,6 @@ public class Startup : FunctionsStartup
     public override void Configure(IFunctionsHostBuilder builder)
     {
         builder.Services.AddSingleton<RawSchedulesParser>();
+        builder.Services.AddSingleton<TimeSlotCalculator>();
     }
 }

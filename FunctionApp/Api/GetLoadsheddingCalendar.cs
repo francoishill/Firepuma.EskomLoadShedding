@@ -16,11 +16,14 @@ namespace Firepuma.EskomLoadShedding.FunctionApp.Api;
 public class GetLoadsheddingCalendar
 {
     private readonly RawSchedulesParser _parser;
+    private readonly TimeSlotCalculator _timeSlotCalculator;
 
     public GetLoadsheddingCalendar(
-        RawSchedulesParser parser)
+        RawSchedulesParser parser,
+        TimeSlotCalculator timeSlotCalculator)
     {
         _parser = parser;
+        _timeSlotCalculator = timeSlotCalculator;
     }
 
     [FunctionName("GetLoadsheddingCalendar")]
@@ -90,6 +93,8 @@ public class GetLoadsheddingCalendar
                     categories.Add($"Stage {i}");
                 }
 
+                _timeSlotCalculator.CalculateDateTimes(date, timeSlot, out var startTime, out var endTime);
+
                 events.Add(new VCalendar.CalendarEvent
                 {
                     Organizer = new VCalendar.CalendarEvent.Member("", ""),
@@ -97,8 +102,8 @@ public class GetLoadsheddingCalendar
                     Uid = Guid.NewGuid().ToString(),
                     Summary = eventTitle,
                     Categories = categories,
-                    Start = date.Add(timeSlot.Start),
-                    End = date.Add(timeSlot.End),
+                    Start = startTime,
+                    End = endTime,
                     Created = new DateTime(2022, 7, 2),
                     Updated = new DateTime(2022, 7, 2),
                 });

@@ -32,8 +32,4 @@
       <None Remove="TestData\LoadSheddingAndOutagesResponse.html" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="FunctionApp\Schedules" />
-    </ItemGroup>
-
 </Project>
