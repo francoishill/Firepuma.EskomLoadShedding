@@ -49,6 +49,14 @@ public class GetLoadsheddingCalendar
             return HttpResponseFactory.CreateBadRequestResponse(areaValidationError);
         }
 
+        var startStage = 1;
+        var endStage = 8;
+        if (req.TryGetRequiredIntQueryParam("stage", out var singleStage, out _))
+        {
+            startStage = singleStage;
+            endStage = singleStage;
+        }
+
         if (!req.TryGetRequiredIntQueryParam("startDaysAgo", out var startDaysAgo, out _))
         {
             startDaysAgo = 3;
@@ -69,7 +77,7 @@ public class GetLoadsheddingCalendar
 
             var timeSlotsWithMinimumStage = new Dictionary<LoadSheddingSchedule.TimeRange, int>();
 
-            for (var stage = 1; stage <= 8; stage++)
+            for (var stage = startStage; stage <= endStage; stage++)
             {
                 var schedule = await _parser.ParseScheduleAsync(stage);
 
@@ -85,10 +93,14 @@ public class GetLoadsheddingCalendar
 
             foreach (var (timeSlot, minimumStage) in timeSlotsWithMinimumStage.OrderBy(pair => pair.Key.Start))
             {
-                var eventTitle = $"Stage {minimumStage}+ {timeSlot.Start.ToString()} - {timeSlot.End.ToString()}";
+                var stageNamePrefix = startStage == endStage
+                    ? ""
+                    : $"Stage {minimumStage}+ ";
+
+                var eventTitle = $"{stageNamePrefix}{timeSlot.Start:hh\\hmm} - {timeSlot.End:hh\\hmm}";
 
                 var categories = new List<string>();
-                for (var i = minimumStage; i <= 8; i++)
+                for (var i = minimumStage; i <= endStage; i++)
                 {
                     categories.Add($"Stage {i}");
                 }
@@ -97,7 +109,7 @@ public class GetLoadsheddingCalendar
 
                 events.Add(new VCalendar.CalendarEvent
                 {
-                    Organizer = new VCalendar.CalendarEvent.Member("", ""),
+                    Organizer = new VCalendar.CalendarEvent.Member("Firepuma", "noreply@firepuma.com"),
                     Attendees = Array.Empty<VCalendar.CalendarEvent.Member>(),
                     Uid = Guid.NewGuid().ToString(),
                     Summary = eventTitle,
@@ -112,20 +124,26 @@ public class GetLoadsheddingCalendar
 
         var calendar = new VCalendar
         {
-            CalendarName = GetCalendarName(customerType),
+            CalendarName = GetCalendarName(customerType, startStage == endStage ? startStage : null),
             CalendarEvents = events,
         };
 
         return new OkVCalendarObjectResult(calendar);
     }
 
-    private static string GetCalendarName(CustomerType customerType)
+    private static string GetCalendarName(CustomerType customerType, int? singleStage)
     {
-        return customerType switch
+        var calendarName = customerType switch
         {
             CustomerType.CityOfCapeTown => "CoCT LoadShedding",
             CustomerType.Eskom => "Eskom LoadShedding",
             _ => $"{customerType.ToString()} LoadShedding"
         };
+
+        calendarName += singleStage.HasValue
+            ? $" (Stage {singleStage})"
+            : " (All stages)";
+
+        return calendarName;
     }
 }
